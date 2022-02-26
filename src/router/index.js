@@ -1,9 +1,26 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home/index.vue'
-import Login from '../views/Login/index.vue'
-import Register from "@/views/Register"
-// import Search from "@/views/Search"
+import Home from '@/views/home/index.vue'
+import Login from '@/views/login/index.vue'
+import Register from "@/views/register"
+// import Search from "@/views/search"
+
+let originPush = VueRouter.prototype.push;
+let originReplace = VueRouter.prototype.replace;
+
+VueRouter.prototype.push = function (location, resolve, reject) {
+    if (resolve || reject) {
+        return originPush.call(this, location, resolve, reject);
+    }
+    return originPush.call(this, location).catch((err) => err);
+}
+
+VueRouter.prototype.replace = function (location, resolve, reject) {
+    if (resolve || reject) {
+        return originReplace.call(this, location, resolve, reject);
+    }
+    return originReplace.call(this, location).catch((err) => err);
+}
 
 Vue.use(VueRouter)
 
@@ -33,7 +50,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/Search/index.vue'),
+        component: () => import(/* webpackChunkName: "about" */ '../views/search'),
         meta: { show: true },
         // props: true,
         // props: {

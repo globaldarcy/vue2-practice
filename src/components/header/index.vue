@@ -59,10 +59,10 @@ export default {
             // 模板形式传参
             // this.$router.push(`/search/${this.keyword}?k=${this.keyword.toUpperCase()}`)
             // 对象形式传参
-            this.$router.push({
+            let foo = this.$router.push({
                 name: 'search',
                 params: {
-                    keyword: this.keyword,
+                    keyword: this.keyword || undefined,
                     // keyword: '' || undefined,
                 },
                 query: {
