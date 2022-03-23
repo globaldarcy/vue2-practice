@@ -1,4 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 module.exports = defineConfig({
     transpileDependencies: true,
     lintOnSave: false,

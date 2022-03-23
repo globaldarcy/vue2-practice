@@ -3,8 +3,7 @@ import NProgress from "nprogress";
 import 'nprogress/nprogress.css'
 
 const instance = axios.create({
-    // baseURL: 'http://39.98.123.211/api/product/getBaseCategoryList',
-    baseURL: '/api',
+    baseURL: '/mock',
     timeout: 5000,
 });
 
