@@ -16,7 +16,7 @@
             Footer,
         },
         methods: {
-            ...mapActions(['categoryList']),
+            ...mapActions('home', ['categoryList']),
         },
         mounted() {
             this.categoryList();

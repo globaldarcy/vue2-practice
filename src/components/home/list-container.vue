@@ -82,7 +82,7 @@
     import { mapState } from 'vuex';
     export default {
         mounted() {
-            this.$store.dispatch('getBannerList');
+            this.$store.dispatch('home/getBannerList');
         },
         computed: {
             ...mapState({

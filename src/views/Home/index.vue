@@ -37,7 +37,7 @@
             }),
         },
         methods: {
-            ...mapActions(['getFloorList']),
+            ...mapActions('home',['getFloorList']),
         },
         mounted() {
             this.getFloorList();

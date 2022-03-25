@@ -1,5 +1,6 @@
 import { reqCategoryList, reqGetBannerList, reqGetFloorList } from "@/api";
 export default {
+    namespaced: true,
     state: {
         currentIndex: -1,
         navList: [],
@@ -49,7 +50,5 @@ export default {
                 context.commit('floorListHandler', result.data)
             }
         }
-    },
-    modules: {
     }
 }

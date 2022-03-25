@@ -64,7 +64,7 @@
             ...mapState({
                 navList: (state) => state.home.navList,
             }),
-            ...mapGetters(['getCurrentIndex']),
+            ...mapGetters('home',['getCurrentIndex']),
         },
         mounted() {
             // this.$store.dispatch('categoryList');
@@ -73,7 +73,7 @@
             }
         },
         methods: {
-            ...mapMutations(['cIndex']),
+            ...mapMutations('home',['cIndex']),
             // changeIndex(i) {
             //     // this.currentIndex = i;
             //     this.cIndex(i);
@@ -156,6 +156,7 @@
                     line-height: 45px;
                     font-size: 16px;
                     color: #333;
+                    cursor: pointer;
                 }
             }
 
@@ -181,6 +182,7 @@
 
                             a {
                                 color: #333;
+                                cursor: pointer;
                             }
                         }
 
@@ -217,6 +219,9 @@
                                         text-align: right;
                                         padding: 3px 6px 0 0;
                                         font-weight: 700;
+                                        a {
+                                            cursor: pointer;
+                                        }
                                     }
 
                                     dd {
@@ -224,7 +229,9 @@
                                         width: 415px;
                                         padding: 3px 0 0;
                                         overflow: hidden;
-
+                                        a {
+                                            cursor: pointer;
+                                        }
                                         em {
                                             float: left;
                                             height: 14px;
