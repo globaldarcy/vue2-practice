@@ -9,6 +9,9 @@ const instance = axios.create({
 });
 
 const myInterceptor = instance.interceptors.request.use((config) => {
+    /* if (store.state.detail.uuid_token) {
+        config.headers.userTempId = store.state.detail.uuid_token;
+    } */
     NProgress.start();
     return config;
 });

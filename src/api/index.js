@@ -6,3 +6,9 @@ export const reqGetBannerList = () => mockRequest.get('/banner');
 export const reqGetFloorList = () => mockRequest.get('/floor');
 
 export const reqGetSearchInfo = (params = {}) => requests({ url: '/list', method: 'post', data: params });
+
+export const reqGoodsInfo = (productId) => requests({ url: `/item/${productId}`, method: 'get' });
+
+export const reqUpdateShopCart = (skuId, skuNum) => requests({ url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'post' });
+
+export const reqCartList = () => requests({ url: '/cart/cartList', method: 'get' });

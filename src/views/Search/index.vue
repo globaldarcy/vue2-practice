@@ -13,34 +13,37 @@
                     <ul class="fl sui-tag">
                         <li class="with-x" v-if="searchParams.categoryName">{{ searchParams.categoryName }}<i @click="rmCategoryName">×</i></li>
                         <li class="with-x" v-if="searchParams.keyword">{{ searchParams.keyword }}<i @click="rmKeyword">×</i></li>
+                        <li class="with-x" v-if="searchParams.trademark">{{ searchParams.trademark.split(':')[1] }}<i @click="rmTradeMark">×</i></li>
+                        <li class="with-x" v-for="(props, i) in searchParams.props" :key="i">{{ props.split(':')[1] }}<i @click="rmProps(props)">×</i></li>
                     </ul>
                 </div>
 
                 <!--selector-->
-                <SearchSelector />
+                <!-- <SearchSelector @tmInfo="tradeMarkInfo" /> -->
+                <SearchSelector ref="tMark" @attrInfo="attrInfo" />
 
                 <!--details-->
                 <div class="details clearfix">
                     <div class="sui-navbar">
                         <div class="navbar-inner filter">
                             <ul class="sui-nav">
-                                <li class="active">
-                                    <a href="#">综合</a>
+                                <li :class="{ active: isOrder(1) }" @click="changeOrder(1)">
+                                    <a>
+                                        综合
+                                        <span v-show="isOrder(1)">
+                                            <span v-show="isSort('asc')">⬆</span>
+                                            <span v-show="isSort('desc')">⬇</span>
+                                        </span>
+                                    </a>
                                 </li>
-                                <li>
-                                    <a href="#">销量</a>
-                                </li>
-                                <li>
-                                    <a href="#">新品</a>
-                                </li>
-                                <li>
-                                    <a href="#">评价</a>
-                                </li>
-                                <li>
-                                    <a href="#">价格⬆</a>
-                                </li>
-                                <li>
-                                    <a href="#">价格⬇</a>
+                                <li :class="{ active: isOrder(2) }" @click="changeOrder(2)">
+                                    <a>
+                                        价格
+                                        <span v-show="isOrder(2)">
+                                            <span v-show="isSort('asc')">⬆</span>
+                                            <span v-show="isSort('desc')">⬇</span>
+                                        </span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -50,7 +53,9 @@
                             <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
                                 <div class="list-wrap">
                                     <div class="p-img">
-                                        <a href="item.html" target="_blank"><img :src="good.defaultImg" /></a>
+                                        <router-link :to="'/detail/' + good.id" >
+                                            <img :src="good.defaultImg" />
+                                        </router-link>
                                     </div>
                                     <div class="price">
                                         <strong>
@@ -72,35 +77,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="fr page">
-                        <div class="sui-pagination clearfix">
-                            <ul>
-                                <li class="prev disabled">
-                                    <a href="#">«上一页</a>
-                                </li>
-                                <li class="active">
-                                    <a href="#">1</a>
-                                </li>
-                                <li>
-                                    <a href="#">2</a>
-                                </li>
-                                <li>
-                                    <a href="#">3</a>
-                                </li>
-                                <li>
-                                    <a href="#">4</a>
-                                </li>
-                                <li>
-                                    <a href="#">5</a>
-                                </li>
-                                <li class="dotted"><span>...</span></li>
-                                <li class="next">
-                                    <a href="#">下一页»</a>
-                                </li>
-                            </ul>
-                            <div><span>共10页&nbsp;</span></div>
-                        </div>
-                    </div>
+                    <Pagination :pageNo="searchParams.pageNo" :pageSize="searchParams.pageSize" :total="searchList.total" :continues="5" @getPageNo="getPageNoHandler" ></Pagination>
                 </div>
             </div>
         </div>
@@ -123,7 +100,7 @@
                     category3Id: undefined,
                     categoryName: undefined,
                     keyword: undefined,
-                    order: undefined,
+                    order: '1:desc',
                     pageNo: 1,
                     pageSize: 5,
                     props: [],
@@ -135,6 +112,12 @@
             // ...mapState({ searchList: (state) => state.search.searchList }),
             ...mapState('search', ['searchList']), // 必须在配置的时候使用命名空间 namespaced: true,
             ...mapGetters('search', ['goodsList']),
+            isOrderOne() {
+                return this.searchParams.order.indexOf(1) !== -1;
+            },
+            isOrderTwo() {
+                return this.searchParams.order.indexOf(2) !== -1;
+            },
         },
         methods: {
             ...mapActions('search', ['getSearchList']),
@@ -164,6 +147,42 @@
                     query: this.$route.query,
                 });
             },
+            tradeMarkInfo(tm) {
+                this.searchParams.trademark = `${tm.tmId}:${tm.tmName}`;
+                this.getSearchList(this.searchParams);
+                // console.log(JSON.stringify(this.searchParams));
+            },
+            rmTradeMark() {
+                this.searchParams.trademark = undefined;
+                this.getSearchList(this.searchParams);
+            },
+            attrInfo(attr, value) {
+                let props = `${attr.attrId}:${value}:${attr.attrName}`;
+                if (this.searchParams.props.indexOf(props) === -1) {
+                    this.searchParams.props.push(props);
+                }
+
+                this.getSearchList(this.searchParams);
+            },
+            rmProps(value) {
+                this.searchParams.props.pop(value);
+                this.getSearchList(this.searchParams);
+            },
+            isOrder(num) {
+                return this.searchParams.order.indexOf(num) !== -1;
+            },
+            isSort(sortby) {
+                return this.searchParams.order.indexOf(sortby) !== -1;
+            },
+            changeOrder(num) {
+                let [number, sortby] = this.searchParams.order.split(':');
+                this.searchParams.order = `${num}:${sortby === 'desc' ? 'asc' : 'desc'}`;
+                this.getSearchList(this.searchParams);
+            },
+            getPageNoHandler(pageNo) {
+                this.searchParams.pageNo = pageNo;
+                this.getSearchList(this.searchParams);
+            }
         },
         beforeMount() {
             // Object.assign(this.searchParams, this.$route.query, this.$route.params)
@@ -173,6 +192,11 @@
         mounted() {
             // this.$store.dispatch('getSearchList');
             this.getSearchList(this.searchParams);
+            /* this.$refs.tMark.$on('tmInfo',  (tm) => {
+                this.searchParams.trademark = `${tm.tmId}:${tm.tmName}`;
+                this.getSearchList(this.searchParams);
+            }); */
+            this.$refs.tMark.$on('tmInfo', this.tradeMarkInfo);
         },
         watch: {
             $route: {
@@ -432,92 +456,6 @@
                     }
                 }
 
-                .page {
-                    width: 733px;
-                    height: 66px;
-                    overflow: hidden;
-                    float: right;
-
-                    .sui-pagination {
-                        margin: 18px 0;
-
-                        ul {
-                            margin-left: 0;
-                            margin-bottom: 0;
-                            vertical-align: middle;
-                            width: 490px;
-                            float: left;
-
-                            li {
-                                line-height: 18px;
-                                display: inline-block;
-
-                                a {
-                                    position: relative;
-                                    float: left;
-                                    line-height: 18px;
-                                    text-decoration: none;
-                                    background-color: #fff;
-                                    border: 1px solid #e0e9ee;
-                                    margin-left: -1px;
-                                    font-size: 14px;
-                                    padding: 9px 18px;
-                                    color: #333;
-                                }
-
-                                &.active {
-                                    a {
-                                        background-color: #fff;
-                                        color: #e1251b;
-                                        border-color: #fff;
-                                        cursor: default;
-                                    }
-                                }
-
-                                &.prev {
-                                    a {
-                                        background-color: #fafafa;
-                                    }
-                                }
-
-                                &.disabled {
-                                    a {
-                                        color: #999;
-                                        cursor: default;
-                                    }
-                                }
-
-                                &.dotted {
-                                    span {
-                                        margin-left: -1px;
-                                        position: relative;
-                                        float: left;
-                                        line-height: 18px;
-                                        text-decoration: none;
-                                        background-color: #fff;
-                                        font-size: 14px;
-                                        border: 0;
-                                        padding: 9px 18px;
-                                        color: #333;
-                                    }
-                                }
-
-                                &.next {
-                                    a {
-                                        background-color: #fafafa;
-                                    }
-                                }
-                            }
-                        }
-
-                        div {
-                            color: #333;
-                            font-size: 14px;
-                            float: right;
-                            width: 241px;
-                        }
-                    }
-                }
             }
         }
     }

@@ -4,6 +4,9 @@ import Home from '@/views/home/index.vue'
 import Login from '@/views/login/index.vue'
 import Register from "@/views/register"
 // import Search from "@/views/search"
+import Detail from "@/views/detail"
+import AddCartSuccess from "@/views/add-cart-success"
+import ShopCart from "@/views/shop-cart"
 
 let originPush = VueRouter.prototype.push;
 let originReplace = VueRouter.prototype.replace;
@@ -63,6 +66,23 @@ const routes = [
         })
     },
     {
+        path: '/detail/:productId',
+        name: 'detail',
+        component: Detail,
+        meta: { show: false },
+    },
+    {
+        path: '/add-cart-success',
+        name: 'add-cart-success',
+        component: AddCartSuccess,
+        meta: { show: true },
+    },
+    {
+        path: '/shop-cart',
+        name: 'shop-cart',
+        component: ShopCart,
+    },
+    {
         path: '*',
         // redirect: '/',
         redirect: {
@@ -72,7 +92,10 @@ const routes = [
 ]
 
 const router = new VueRouter({
-    routes
+    routes,
+    scrollBehavior(to, from, savedPosition) {
+        return { y: 0 }
+    }
 })
 
 export default router

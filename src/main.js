@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import TypeNav from "@/components/home/type-nav.vue"
 import Carousel from '@/components/carousel'
+import Pagination from '@/components/pagination'
 import 'swiper/css/swiper.css'
 
 import '@/mock/mockServer';
@@ -11,6 +12,7 @@ import '@/mock/mockServer';
 // reqCategoryList();
 Vue.component(TypeNav.name, TypeNav); // 全局组件
 Vue.component(Carousel.name, Carousel); // 全局组件
+Vue.component(Pagination.name, Pagination); // 全局组件
 
 Vue.config.productionTip = false
 
