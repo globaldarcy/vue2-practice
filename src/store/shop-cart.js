@@ -6,6 +6,9 @@ export default {
         cartList: [],
     },
     getters: {
+        cartList(state) {
+            return state.cartList[0] || {};
+        }
     },
     mutations: {
         getCartListHandler(state, data) {
@@ -15,7 +18,6 @@ export default {
     actions: {
         async getCartList(context) {
             let result = await reqCartList();
-            console.log(result);
             if (result.code === 200) {
                 context.commit('getCartListHandler', result.data);
             }

@@ -1,6 +1,7 @@
 import axios from "axios";
 import NProgress from "nprogress";
 import 'nprogress/nprogress.css'
+import store from '@/store';
 
 const instance = axios.create({
     // baseURL: 'http://39.98.123.211/api/product/getBaseCategoryList',
@@ -9,9 +10,9 @@ const instance = axios.create({
 });
 
 const myInterceptor = instance.interceptors.request.use((config) => {
-    /* if (store.state.detail.uuid_token) {
-        config.headers.userTempId = store.state.detail.uuid_token;
-    } */
+    if (store.state.detail.token) {
+        config.headers.userTempId = store.state.detail.token;
+    }
     NProgress.start();
     return config;
 });

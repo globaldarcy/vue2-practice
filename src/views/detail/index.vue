@@ -352,16 +352,14 @@
                 // console.log(this.number);
             },
             async addShopCart() {
-                console.log(this.$router);
-                let result = await this.getUpdateShopCart(this.skuInfo.id, this.number)
-                    .then((value) => {
-                        console.log(value);
+                let result = await this.getUpdateShopCart({ skuId: this.skuInfo.id, sukNum: this.number })
+                    .then(() => {
+                        sessionStorage.setItem('skuInfo', JSON.stringify(this.skuInfo));
+                        // this.$router.push('/add-cart-success');
+                        this.$router.push({ name: 'add-cart-success', query: { skuNum: this.number } });
                     })
                     .catch((value) => {
                         console.log(value);
-                        // this.$router.push('/add-cart-success');
-                        sessionStorage.setItem('skuInfo', JSON.stringify(this.skuInfo));
-                        this.$router.push({ name: 'add-cart-success', query: { skuNum: this.number } });
                     });
             },
         },

@@ -1,9 +1,11 @@
 import { reqGoodsInfo, reqUpdateShopCart } from "@/api";
+import { getToken } from "@/utils/token";
 export default {
     namespaced: true,
     state: {
         goodsInfo: {},
         imgIndex: 0,
+        token: getToken(),
     },
     getters: {
         categoryView(state) {
@@ -31,8 +33,9 @@ export default {
                 context.commit('goodsInfoHandler', result.data)
             }
         },
-        async getUpdateShopCart(context, skuId, sukNum) {
+        async getUpdateShopCart(context, { skuId, sukNum }) {
             let result = await reqUpdateShopCart(skuId, sukNum);
+            // let result = await reqUpdateShopCart('21', '10');
             console.log(result);
             if (result.code === 200) {
                 return result.ok
