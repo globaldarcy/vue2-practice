@@ -105,6 +105,7 @@
         },
         mounted() {
             this.getCartList();
+            
             // this.$store.dispatch('shopCart/getCartList');
         },
     };
