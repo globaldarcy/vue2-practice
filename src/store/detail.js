@@ -36,7 +36,7 @@ export default {
         async getUpdateShopCart(context, { skuId, sukNum }) {
             let result = await reqUpdateShopCart(skuId, sukNum);
             // let result = await reqUpdateShopCart('21', '10');
-            console.log(result);
+            // console.log(result);
             if (result.code === 200) {
                 return result.ok
             }

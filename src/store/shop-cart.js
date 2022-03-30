@@ -1,4 +1,4 @@
-import { reqCartList, reqCategoryList } from "@/api";
+import { reqCartList, reqDeleteCartById, reqUpdateCheckedById } from "@/api";
 
 export default {
     namespaced: true,
@@ -21,6 +21,29 @@ export default {
             if (result.code === 200) {
                 context.commit('getCartListHandler', result.data);
             }
+        },
+        async deleteCartById(context, skuId) {
+            let result = await reqDeleteCartById(skuId);
+            if (result.code === 200) {
+                return result.ok
+            }
+            return new Promise.reject(result.message)
+        },
+        async updateCheckedById(context, { skuId, isChecked }) {
+            // console.log(skuId, isChecked);
+            let result = await reqUpdateCheckedById(skuId, isChecked);
+            if (result.code === 200) {
+                return result.ok
+            }
+            return new Promise.reject(result.message)
+        },
+        deleteAllCheckedCart(context) {
+            let result = context.getters.cartList.cartInfoList.map(item => {
+                if (item.isChecked == 1) {
+                    return context.dispatch('deleteCartById', item.skuId);
+                }
+            });
+            return Promise.all(result);
         }
     }
 }

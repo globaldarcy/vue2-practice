@@ -13,7 +13,7 @@
             <div class="cart-body">
                 <ul class="cart-list" v-for="item in cartInfoList" :key="item.ie">
                     <li class="cart-list-con1">
-                        <input type="checkbox" name="chk_list" :checked="item.isChecked" />
+                        <input type="checkbox" name="chk_list" :checked="item.isChecked" @change="updateChecked(item.skuId, !item.isChecked)" />
                     </li>
                     <li class="cart-list-con2">
                         <img :src="item.imgUrl" />
@@ -34,7 +34,7 @@
                         <span class="sum">{{ item.skuPrice * item.skuNum }}</span>
                     </li>
                     <li class="cart-list-con7">
-                        <a href="#none" class="sindelet">删除</a>
+                        <a href="#none" class="sindelet" @click.prevent="deleteCartSkuId(item.skuId)">删除</a>
                         <br />
                         <a href="#none">移到收藏</a>
                     </li>
@@ -43,11 +43,11 @@
         </div>
         <div class="cart-tool">
             <div class="select-all">
-                <input class="chooseAll" type="checkbox" :checked="isAllCheck" />
+                <input class="chooseAll" type="checkbox" :checked="isAllCheck && cartInfoList.length > 0" @click="updateCheckAll($event)" />
                 <span>全选</span>
             </div>
             <div class="option">
-                <a href="#none">删除选中的商品</a>
+                <a @click="deleteAllChecked">删除选中的商品</a>
                 <a href="#none">移到我的关注</a>
                 <a href="#none">清除下柜商品</a>
             </div>
@@ -70,12 +70,83 @@
 
 <script>
     import { mapActions, mapGetters } from 'vuex';
+    import throttle from 'lodash/throttle';
     export default {
         name: 'ShopCart',
         methods: {
-            ...mapActions('shopCart', ['getCartList']),
-            changeNum(type, value, item) {
-
+            ...mapActions('shopCart', ['getCartList', 'deleteCartById', 'updateCheckedById', 'deleteAllCheckedCart']),
+            ...mapActions('detail', ['getUpdateShopCart']),
+            updateCheckAll(e) {
+                let isCAll = e.target.checked ? 1 : 0;
+                this.cartInfoList.forEach((item) => {
+                    this.updateChecked(item.skuId, isCAll);
+                });
+            },
+            async updateChecked(skuId, isChecked) {
+                await this.updateCheckedById({ skuId: skuId, isChecked: +isChecked }).then(
+                    (resolve) => {
+                        // console.log(resolve);
+                        this.getCartList();
+                    },
+                    (err) => {
+                        console.log(err);
+                    }
+                );
+            },
+            changeNum: throttle(async function (type, value, item) {
+                switch (type) {
+                    case 'change':
+                        if (isNaN(value * 1) || value < 1) {
+                            value = 0;
+                        } else {
+                            value = parseInt(value) - item.skuNum;
+                        }
+                        break;
+                    case 'minus':
+                        value = item.skuNum > 1 ? -1 : 0;
+                        break;
+                }
+                await this.getUpdateShopCart({ skuId: item.skuId, sukNum: value }).then(
+                    (resolve) => {
+                        console.log(resolve);
+                        this.getCartList();
+                    },
+                    (err) => {
+                        console.log(err);
+                    }
+                );
+            }, 500),
+            async deleteCartSkuId(skuId) {
+                console.log(skuId);
+                await this.deleteCartById(skuId).then(
+                    (resolve) => {
+                        console.log(resolve);
+                        this.getCartList();
+                    },
+                    (err) => {
+                        console.log(err);
+                    }
+                );
+            },
+            /* deleteAllChecked() {
+                // 第一种方法
+                this.cartInfoList.forEach((item) => {
+                    if (item.isChecked == 1) {
+                        this.deleteCartSkuId(item.skuId);
+                    }
+                });
+            }, */
+            async deleteAllChecked() {
+                // 第二种方法
+                await this.deleteAllCheckedCart().then(
+                    (resolve) => {
+                        console.log(resolve);
+                        this.getCartList();
+                    },
+                    (err) => {
+                        console.log(err);
+                    }
+                );
             },
         },
         computed: {
@@ -98,14 +169,14 @@
                 return totalPrice;
             },
             isAllCheck() {
-                return this.cartInfoList.map((item) => {
+                return this.cartInfoList.every((item) => {
                     return item.isChecked;
                 });
             },
         },
         mounted() {
             this.getCartList();
-            
+
             // this.$store.dispatch('shopCart/getCartList');
         },
     };
