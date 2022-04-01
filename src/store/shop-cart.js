@@ -27,7 +27,7 @@ export default {
             if (result.code === 200) {
                 return result.ok
             }
-            return new Promise.reject(result.message)
+            return Promise.reject(result.message)
         },
         async updateCheckedById(context, { skuId, isChecked }) {
             // console.log(skuId, isChecked);
@@ -35,7 +35,7 @@ export default {
             if (result.code === 200) {
                 return result.ok
             }
-            return new Promise.reject(result.message)
+            return Promise.reject(result.message)
         },
         deleteAllCheckedCart(context) {
             let result = context.getters.cartList.cartInfoList.map(item => {

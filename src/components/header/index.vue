@@ -5,11 +5,12 @@
             <div class="container">
                 <div class="loginList">
                     <p>尚品汇欢迎您！</p>
-                    <p>
+                    <p v-if="!nickName">
                         <span>请</span>
                         <router-link class="aa" to="/login">登录</router-link>
                         <router-link to="register" class="register">免费注册</router-link>
                     </p>
+                    <p v-else>{{ nickName }} <router-link to="register" class="register">退出登录</router-link></p>
                 </div>
                 <div class="typeList">
                     <a href="###">我的订单</a>
@@ -46,6 +47,11 @@
             return {
                 keyword: '',
             };
+        },
+        computed: {
+            nickName() {
+                return this.$store.state.user.userInfo.nickName;
+            },
         },
         mounted() {
             // this.$bus.$on('clear', ()=> {

@@ -37,10 +37,21 @@
             }),
         },
         methods: {
-            ...mapActions('home',['getFloorList']),
+            ...mapActions('home', ['getFloorList']),
+            ...mapActions('user', ['getUserInfo']),
+            async userInfoMethod() {
+                await this.getUserInfo()
+                    .then((resolve) => {
+                        console.log(resolve);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            },
         },
         mounted() {
             this.getFloorList();
+            this.userInfoMethod();
         },
     };
 </script>

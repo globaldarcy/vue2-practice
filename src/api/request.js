@@ -13,6 +13,9 @@ const myInterceptor = instance.interceptors.request.use((config) => {
     if (store.state.detail.token) {
         config.headers.userTempId = store.state.detail.token;
     }
+    if (store.state.user.token) {
+        config.headers.token = store.state.user.token;
+    }
     NProgress.start();
     return config;
 });
