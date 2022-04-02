@@ -20,7 +20,9 @@ export default {
             let result = await reqCartList();
             if (result.code === 200) {
                 context.commit('getCartListHandler', result.data);
+                return result.ok;
             }
+            return Promise.reject(result.message);
         },
         async deleteCartById(context, skuId) {
             let result = await reqDeleteCartById(skuId);

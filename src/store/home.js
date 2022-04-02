@@ -35,20 +35,26 @@ export default {
         async categoryList(context) {
             let result = await reqCategoryList();
             if (result.code === 200) {
-                context.commit('categoryListHandler', result.data)
+                context.commit('categoryListHandler', result.data);
+                return result.ok;
             }
+            return Promise.reject(result.message);
         },
         async getBannerList(context) {
             let result = await reqGetBannerList();
             if (result.code === 200) {
-                context.commit('bannerListHandler', result.data)
+                context.commit('bannerListHandler', result.data);
+                return result.ok;
             }
+            return Promise.reject(result.message);
         },
         async getFloorList(context) {
             let result = await reqGetFloorList();
             if (result.code === 200) {
-                context.commit('floorListHandler', result.data)
+                context.commit('floorListHandler', result.data);
+                return result.ok;
             }
+            return Promise.reject(result.message);
         }
     }
 }

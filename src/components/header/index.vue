@@ -10,11 +10,12 @@
                         <router-link class="aa" to="/login">登录</router-link>
                         <router-link to="register" class="register">免费注册</router-link>
                     </p>
-                    <p v-else>{{ nickName }} <router-link to="register" class="register">退出登录</router-link></p>
+                    <p v-else>{{ nickName }} <a class="register" @click="logout">退出登录</a></p>
                 </div>
                 <div class="typeList">
                     <a href="###">我的订单</a>
-                    <a href="###">我的购物车</a>
+                    <!-- <a @click="$router.push('/shop-cart');">我的购物车</a> -->
+                    <router-link to="/shop-cart">我的购物车</router-link>
                     <a href="###">我的尚品汇</a>
                     <a href="###">尚品汇会员</a>
                     <a href="###">企业采购</a>
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex';
     export default {
         data() {
             return {
@@ -95,6 +97,17 @@
                     location.query = this.$route.query;
                     this.$router.push(location);
                 }
+            },
+            ...mapActions('user', ['getLogout']),
+            async logout() {
+                await this.getLogout()
+                    .then((resolve) => {
+                        this.$router.push('/');
+                        console.log('logout', resolve);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
             },
         },
     };

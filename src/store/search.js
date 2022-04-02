@@ -26,7 +26,9 @@ export default {
             let result = await reqGetSearchInfo(params);
             if (result.code === 200) {
                 context.commit('getSearchListHandler', result.data);
+                return result.ok;
             }
+            return Promise.reject(result.message);
         }
     }
 }

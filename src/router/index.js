@@ -7,6 +7,8 @@ import Register from "@/views/register"
 import Detail from "@/views/detail"
 import AddCartSuccess from "@/views/add-cart-success"
 import ShopCart from "@/views/shop-cart"
+import Trade from "@/views/trade"
+import store from '@/store'
 
 let originPush = VueRouter.prototype.push;
 let originReplace = VueRouter.prototype.replace;
@@ -83,6 +85,11 @@ const routes = [
         component: ShopCart,
     },
     {
+        path: '/trade',
+        name: 'trade',
+        component: Trade,
+    },
+    {
         path: '*',
         // redirect: '/',
         redirect: {
@@ -95,6 +102,33 @@ const router = new VueRouter({
     routes,
     scrollBehavior(to, from, savedPosition) {
         return { y: 0 }
+    }
+})
+
+// 全局路由守卫
+router.beforeEach((to, from, next) => {
+    let token = store.state.user.token;
+    let name = store.state.user.userInfo.name;
+    if (token) {
+        if (to.name === 'login' || to.path == '/register') {
+            next('/');
+        } else {
+            if (name) {
+                next();
+            } else {
+                store.dispatch('user/getUserInfo')
+                    .then((resolve) => {
+                        console.log('userInfoMethod', resolve);
+                        next();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        store.dispatch('user/getLogout');
+                    });
+            }
+        }
+    } else {
+        next();
     }
 })
 

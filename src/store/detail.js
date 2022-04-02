@@ -30,8 +30,10 @@ export default {
         async getGoodsInfo(context, productId) {
             let result = await reqGoodsInfo(productId);
             if (result.code === 200) {
-                context.commit('goodsInfoHandler', result.data)
+                context.commit('goodsInfoHandler', result.data);
+                return result.ok;
             }
+            return Promise.reject(result.message);
         },
         async getUpdateShopCart(context, { skuId, sukNum }) {
             let result = await reqUpdateShopCart(skuId, sukNum);

@@ -38,11 +38,11 @@
         },
         methods: {
             ...mapActions('home', ['getFloorList']),
-            ...mapActions('user', ['getUserInfo']),
+            ...mapActions('user', ['getUserInfo', 'setUserInfo']),
             async userInfoMethod() {
                 await this.getUserInfo()
                     .then((resolve) => {
-                        console.log(resolve);
+                        console.log('userInfoMethod', resolve);
                     })
                     .catch((err) => {
                         console.log(err);

@@ -61,7 +61,7 @@
                     <i class="summoney">{{ totalPrice }}</i>
                 </div>
                 <div class="sumbtn">
-                    <a class="sum-btn" href="###" target="_blank">结算</a>
+                    <a class="sum-btn" @click="settlement">结算</a>
                 </div>
             </div>
         </div>
@@ -147,6 +147,13 @@
                         console.log(err);
                     }
                 );
+            },
+            settlement() {
+                if (this.cartInfoList.length > 0) {
+                    this.$router.push('/trade');
+                } else {
+                    alert('请添加商品!')
+                }
             },
         },
         computed: {

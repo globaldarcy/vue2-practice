@@ -1,4 +1,4 @@
-import { reqGetCode, reqGetCodeMock, reqRegister, reqLogin, reqUserInfo } from "@/api";
+import { reqGetCode, reqGetCodeMock, reqRegister, reqLogin, reqUserInfo, reqLogout } from "@/api";
 export default {
     namespaced: true,
     state: {
@@ -22,6 +22,11 @@ export default {
         getUserInfoHandler(state, data) {
             state.userInfo = data;
         },
+        clear(state) {
+            state.token = '';
+            state.userInfo = {};
+            sessionStorage.removeItem('token');
+        },
     },
     actions: {
         async getCode(context, phone) {
@@ -29,14 +34,18 @@ export default {
             console.log(result);
             if (result.code === 200) {
                 context.commit('getCodeHandler', result.data);
+                return result.ok;
             }
+            return Promise.reject(result.message);
         },
         async getCodeMock(context, phone) {
             let result = await reqGetCodeMock(phone);
             console.log(result);
             if (result.code === 200) {
                 context.commit('getCodeMockHandler', result.data);
+                return result.ok;
             }
+            return Promise.reject(result.message);
         },
         async getRegister(context, data) {
             let result = await reqRegister(data);
@@ -63,7 +72,16 @@ export default {
                 context.commit('getUserInfoHandler', result.data);
                 return result.ok;
             }
-            return Promise.reject(result.message)
+            return Promise.reject(result.message);
+        },
+        async getLogout(context) {
+            let result = await reqLogout();
+            console.log('getLogout', result);
+            if (result.code === 200) {
+                context.commit('clear');
+                return result.ok;
+            }
+            return Promise.reject(result.message);
         },
     },
     modules: {
