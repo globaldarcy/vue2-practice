@@ -9,6 +9,12 @@ import 'swiper/css/swiper.css'
 import * as Api from '@/api'
 import { Button, MessageBox } from 'element-ui';
 import VueLazyload from 'vue-lazyload'
+import plugins from '@/plugins';
+import '@/plugins/validate';
+
+Vue.use(plugins, {
+    name: 'upper'
+});
 
 Vue.use(VueLazyload, {
     preLoad: 1.3,
@@ -17,7 +23,8 @@ Vue.use(VueLazyload, {
     attempt: 1,
     // the default is ['scroll', 'wheel', 'mousewheel', 'resize', 'animationend', 'transitionend']
     listenEvents: ['scroll']
-})
+});
+
 Vue.component(Button.name, Button);
 Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$alert = MessageBox.alert;

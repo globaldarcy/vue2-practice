@@ -39,7 +39,7 @@ const routes = [
         path: '/',
         alias: '/home',
         name: 'home',
-        component: Home,
+        component:  () => import('@/views/home'),
         meta: { show: true }
     },
     {
@@ -60,7 +60,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/search'),
+        component: () => import('../views/search'),
         meta: { show: true },
         // props: true,
         // props: {
@@ -88,11 +88,13 @@ const routes = [
         path: '/shop-cart',
         name: 'shop-cart',
         component: ShopCart,
+        meta: { show: true },
     },
     {
         path: '/trade',
         name: 'trade',
         component: Trade,
+        meta: { show: true },
         beforeEnter: (to, from, next) => {
             if (from.path == '/shop-cart') {
                 next();
@@ -105,6 +107,7 @@ const routes = [
         path: '/pay',
         name: 'pay',
         component: Pay,
+        meta: { show: true },
         beforeEnter: (to, from, next) => {
             if (from.path == '/trade') {
                 next();
@@ -117,6 +120,7 @@ const routes = [
         path: '/pay-success',
         name: 'pay-success',
         component: PaySuccess,
+        meta: { show: true },
         // beforeEnter: (to, from, next) => {
         //     if (from.path == '/pay') {
         //         next();
@@ -129,14 +133,17 @@ const routes = [
         path: '/center',
         name: 'center',
         component: Center,
+        meta: { show: true },
         children: [
             {
                 path: 'my-order',
                 component: MyOrder,
+                meta: { show: true },
             },
             {
                 path: 'group-order',
                 component: GroupOrder,
+                meta: { show: true },
             },
             {
                 path: '/center',
