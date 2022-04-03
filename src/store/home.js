@@ -46,7 +46,7 @@ export default {
                 context.commit('bannerListHandler', result.data);
                 return result.ok;
             }
-            return Promise.reject(result.message);
+            return Promise.reject(result);
         },
         async getFloorList(context) {
             let result = await reqGetFloorList();
@@ -54,7 +54,7 @@ export default {
                 context.commit('floorListHandler', result.data);
                 return result.ok;
             }
-            return Promise.reject(result.message);
+            return Promise.reject(result);
         }
     }
 }

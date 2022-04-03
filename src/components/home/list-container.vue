@@ -81,8 +81,19 @@
 <script>
     import { mapState } from 'vuex';
     export default {
+        methods: {
+            async getBannerList() {
+                let result = await this.$store.dispatch('home/getBannerList')
+                    .then((resolve) => {
+                        console.log('getBannerList', resolve);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            },
+        },
         mounted() {
-            this.$store.dispatch('home/getBannerList');
+            this.getBannerList();
         },
         computed: {
             ...mapState({

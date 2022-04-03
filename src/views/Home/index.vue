@@ -48,9 +48,18 @@
                         console.log(err);
                     });
             },
+            async getBannerListMethod() {
+                let result = await this.getFloorList()
+                    .then((resolve) => {
+                        console.log('getBannerListMethod', resolve);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            },
         },
         mounted() {
-            this.getFloorList();
+            this.getBannerListMethod();
             this.userInfoMethod();
         },
     };

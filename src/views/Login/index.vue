@@ -76,8 +76,8 @@
                 password: '111111',
             };
         },
-        computed:{
-            ...mapState('user', ['user'])
+        computed: {
+            ...mapState('user', ['user']),
         },
         methods: {
             ...mapActions('user', ['getLogin']),
@@ -85,11 +85,14 @@
                 await this.getLogin({
                     phone: this.phone,
                     password: this.password,
-                }).then(resolve=>{
-                    this.$router.push('/')
-                }).catch(err => {
-                    alert('登录失败')
                 })
+                    .then((resolve) => {
+                        let redirect = this.$route.query.redirect || '/';
+                        this.$router.push(redirect);
+                    })
+                    .catch((err) => {
+                        alert('登录失败');
+                    });
             },
         },
     };

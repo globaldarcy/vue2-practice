@@ -8,6 +8,11 @@ import Detail from "@/views/detail"
 import AddCartSuccess from "@/views/add-cart-success"
 import ShopCart from "@/views/shop-cart"
 import Trade from "@/views/trade"
+import Pay from "@/views/pay"
+import PaySuccess from "@/views/pay-success"
+import Center from "@/views/center"
+import MyOrder from "@/views/center/my-order.vue"
+import GroupOrder from "@/views/center/group-order.vue"
 import store from '@/store'
 
 let originPush = VueRouter.prototype.push;
@@ -88,6 +93,56 @@ const routes = [
         path: '/trade',
         name: 'trade',
         component: Trade,
+        beforeEnter: (to, from, next) => {
+            if (from.path == '/shop-cart') {
+                next();
+            } else {
+                next(false);
+            }
+        },
+    },
+    {
+        path: '/pay',
+        name: 'pay',
+        component: Pay,
+        beforeEnter: (to, from, next) => {
+            if (from.path == '/trade') {
+                next();
+            } else {
+                next(false);
+            }
+        },
+    },
+    {
+        path: '/pay-success',
+        name: 'pay-success',
+        component: PaySuccess,
+        // beforeEnter: (to, from, next) => {
+        //     if (from.path == '/pay') {
+        //         next();
+        //     } else {
+        //         next(false);
+        //     }
+        // },
+    },
+    {
+        path: '/center',
+        name: 'center',
+        component: Center,
+        children: [
+            {
+                path: 'my-order',
+                component: MyOrder,
+            },
+            {
+                path: 'group-order',
+                component: GroupOrder,
+            },
+            {
+                path: '/center',
+                redirect: '/center/my-order'
+            },
+        ]
     },
     {
         path: '*',
@@ -128,7 +183,12 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else {
-        next();
+        let toPath = to.path;
+        if (toPath == '/trade' || toPath.indexOf('/pay') != -1 || toPath.indexOf('/center') != -1) {
+            next('/login?redirect=' + toPath);
+        } else {
+            next();
+        }
     }
 })
 
