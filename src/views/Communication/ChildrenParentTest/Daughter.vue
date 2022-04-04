@@ -1,21 +1,20 @@
 <template>
-  <div style="background: #ccc; height: 50px;">
-    <h3>女儿小红: 有存款: {{money}}</h3>
-    <button>给BABA钱: 100</button>
-  </div>
+    <div style="background: #c9c; height: 70px">
+        <h3>女儿小红: 有存款: {{ money }}</h3>
+        <br />
+        <button @click="geiQian(100)">给BABA钱: 100</button>
+    </div>
 </template>
 
 <script>
-export default {
-  name: 'Daughter',
-  data () {
-    return {
-      money: 20000
-    }
-  },
-
-  methods: {
-    
-  }
-}
+    import myMinxin from './mixin';
+    export default {
+        name: 'Daughter',
+        data() {
+            return {
+                money: 20000,
+            };
+        },
+        mixins: [myMinxin],
+    };
 </script>

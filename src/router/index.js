@@ -196,7 +196,14 @@ const routes = [
                 meta: {
                     isHideFooter: true
                 },
-            }
+            },
+            {
+                path: 'test',
+                component: () => import('@/views/Communication/test/parent'),
+                meta: {
+                    isHideFooter: true
+                },
+            },
         ],
     },
     {

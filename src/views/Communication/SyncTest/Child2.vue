@@ -1,13 +1,14 @@
 <template>
-  <div style="background: #ccc; height: 50px;">
-    <span>小明每次花100元</span>
-    <button>花钱</button>
-    爸爸还剩 ??? 元
-  </div>
+    <div style="background: #cc0; height: 50px">
+        <span>小明每次花100元 </span>
+        <button @click="$emit('update:money', money - 100)"> 花 钱 </button>
+        爸爸还剩 {{ money }} 元
+    </div>
 </template>
 
-<script type="text/ecmascript-6">
-  export default {
-    name: 'Child2'
-  }
+<script>
+    export default {
+        name: 'Child2',
+        props: ['money'],
+    };
 </script>
