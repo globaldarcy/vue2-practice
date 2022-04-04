@@ -17,7 +17,7 @@
                     <router-link to="/center">我的订单</router-link>
                     <!-- <a @click="$router.push('/shop-cart');">我的购物车</a> -->
                     <router-link to="/shop-cart">我的购物车</router-link>
-                    <a href="###">我的尚品汇</a>
+                    <router-link to="/communication">我的尚品汇</router-link>
                     <a href="###">尚品汇会员</a>
                     <a href="###">企业采购</a>
                     <a href="###">关注尚品汇</a>
